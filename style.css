@@ -1,0 +1,140 @@
+:root {
+    --background-color: rgb(16, 16, 16);
+    --background-color-transparent: rgba(16, 16, 16, 0.8);
+    --border-color: rgba(255, 255, 255, 0.1);
+}
+
+.backdrop-blur {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.sticky {
+    position: fixed;
+    top: 0;
+    width: 100%;
+}
+
+body {
+    background-color: var(--background-color);
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    height: 100vh;
+    overflow: hidden;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+h1,
+h2,
+h3,
+a,
+p,
+i,
+span {
+    color: white;
+    font-family: 'Roboto Condensed', Sans-serif;
+}
+
+h1 {
+    font-size: 24pt;
+}
+
+nav {
+    display: flex;
+    width: 100%;
+    border-bottom: 1px solid var(--border-color);
+    /* background-color: var(--background-color-transparent); */
+}
+
+nav>.nav-section {
+    padding: 1rem 2rem;
+    gap: 1rem;
+    display: flex;
+    height: 100px;
+    align-items: center;
+    justify-content: center;
+}
+
+#nav-name-section {
+    width: 100%;
+    font-weight: bolder;
+    font-style: oblique;
+    text-transform: uppercase;
+    white-space: nowrap;
+    justify-content: flex-start;
+}
+
+#rocket {
+    transition: all 1s ease;
+    opacity: 1;
+}
+
+#rocket:hover {
+    padding-left: 50%;
+    opacity: 0;
+}
+
+#nav-social-section a {
+    opacity: 0.6;
+    transition: all 0.3s ease;
+}
+
+#nav-social-section a:hover {
+    opacity: 1;
+}
+
+#nav-social-section,
+#nav-logo-section {
+    border-left: 1px solid var(--border-color);
+}
+
+#nav-logo-section {
+    min-width: 350px;
+}
+
+#nav-logo {
+    max-width: 256px;
+    margin-left: -3%;
+}
+
+main {
+    flex-grow: 1;
+}
+
+.article-query-section {
+    grid-area: query;
+}
+
+.article-stats-section {
+    grid-area: stats;
+}
+
+.article-results-section {
+    grid-area: results;
+}
+
+main>article {
+    display: grid;
+    height: 100%;
+    grid-template-columns: auto 350px;
+    grid-template-rows: min-content auto;
+    grid-template-areas:
+        'query stats'
+        'results stats';
+}
+
+main>article>.article-section {
+    height: 100%;
+}
+
+main>article>.article-query-section {
+    border-bottom: 1px solid var(--border-color);
+}
+
+main>article>.article-stats-section {
+    border-left: 1px solid var(--border-color);
+}
