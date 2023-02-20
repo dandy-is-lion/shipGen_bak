@@ -1,31 +1,54 @@
 :root {
-    --background-color: rgb(16, 16, 16);
-    --background-color-transparent: rgba(16, 16, 16, 0.8);
-    --border-color: rgba(255, 255, 255, 0.1);
+  --foreground-color: rgb(208, 233, 232);
+  --background-color: rgb(14, 15, 17);
+  --background-color-transparent: rgba(44, 98, 169, 0.1);
+  --background-color-transparent-hover: rgba(44, 98, 169, 0.3);
+  --border-color: rgb(40, 105, 189);
+  --border-color-transparent: rgba(40, 105, 189, 0.4);
+  /* --border-color-hover: rgb(40, 105, 189); */
+  --border-width: 2px;
 }
 
 .backdrop-blur {
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .sticky {
-    position: fixed;
-    top: 0;
-    width: 100%;
+  position: fixed;
+  top: 0;
+  width: 100%;
 }
 
 body {
-    background-color: var(--background-color);
-    display: flex;
-    flex-direction: column;
-    margin: 0;
-    height: 100vh;
-    overflow: hidden;
+  background-color: var(--background-color);
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  height: 100vh;
+  overflow: hidden;
 }
 
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+#background-pattern {
+  display: block;
+  height: 100vh;
+  width: 100vw;
+
+  background-image: radial-gradient(
+    rgba(255, 255, 255, 0.1) 9%,
+    transparent 9%
+  );
+  background-position: 0% 0%;
+  background-size: 1vmin 1vmin;
+
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  z-index: 1;
 }
 
 h1,
@@ -34,107 +57,183 @@ h3,
 a,
 p,
 i,
-span {
-    color: white;
-    font-family: 'Roboto Condensed', Sans-serif;
+span,
+th,
+td {
+  color: var(--foreground-color);
+  font-family: "Roboto Condensed", Sans-serif;
 }
 
 h1 {
-    font-size: 24pt;
+  font-size: 2em;
 }
 
 nav {
-    display: flex;
-    width: 100%;
-    border-bottom: 1px solid var(--border-color);
-    /* background-color: var(--background-color-transparent); */
+  display: flex;
+  width: 100%;
+  border-bottom: var(--border-width) solid var(--border-color);
+  z-index: 2;
 }
 
-nav>.nav-section {
-    padding: 1rem 2rem;
-    gap: 1rem;
-    display: flex;
-    height: 100px;
-    align-items: center;
-    justify-content: center;
+nav > .nav-section {
+  padding: 1rem 2rem;
+  gap: 1rem;
+  display: flex;
+  height: 100px;
+  align-items: center;
+  justify-content: center;
 }
 
 #nav-name-section {
-    width: 100%;
-    font-weight: bolder;
-    font-style: oblique;
-    text-transform: uppercase;
-    white-space: nowrap;
-    justify-content: flex-start;
+  width: 100%;
+  font-weight: bolder;
+  font-style: oblique;
+  text-transform: uppercase;
+  white-space: nowrap;
+  justify-content: flex-start;
+  overflow: hidden;
 }
 
 #rocket {
-    transition: all 1s ease;
-    opacity: 1;
+  transition: all 800ms ease;
+  opacity: 1;
 }
 
 #rocket:hover {
-    padding-left: 50%;
-    opacity: 0;
+  padding-left: 50%;
+  opacity: 0;
 }
 
-#nav-social-section a {
-    opacity: 0.6;
-    transition: all 0.3s ease;
+#nav-social-section > .social-link > h1 > a > i {
+  transition: all 400ms ease;
+  color: var(--foreground-color);
+  opacity: 1;
 }
 
-#nav-social-section a:hover {
-    opacity: 1;
+#nav-social-section:hover > .social-link > h1 > a > i {
+  color: var(--border-color);
+  opacity: 0.3;
+}
+
+#nav-social-section:hover > .social-link > h1 > a > i:hover {
+  transition: all 400ms ease;
+  color: var(--foreground-color);
+  opacity: 1;
 }
 
 #nav-social-section,
 #nav-logo-section {
-    border-left: 1px solid var(--border-color);
+  border-left: var(--border-width) solid var(--border-color);
 }
 
 #nav-logo-section {
-    min-width: 350px;
+  min-width: 386px;
 }
 
 #nav-logo {
-    max-width: 256px;
-    margin-left: -3%;
+  max-width: 256px;
+  margin-left: -3%;
 }
 
 main {
-    flex-grow: 1;
+  flex-grow: 1;
 }
 
 .article-query-section {
-    grid-area: query;
+  grid-area: query;
 }
 
 .article-stats-section {
-    grid-area: stats;
+  grid-area: stats;
 }
 
 .article-results-section {
-    grid-area: results;
+  grid-area: results;
 }
 
-main>article {
-    display: grid;
-    height: 100%;
-    grid-template-columns: auto 350px;
-    grid-template-rows: min-content auto;
-    grid-template-areas:
-        'query stats'
-        'results stats';
+article {
+  display: grid;
+  height: 100%;
+  grid-template-columns: auto min-content;
+  grid-template-rows: min-content auto;
+  grid-template-areas:
+    "query stats"
+    "results stats";
 }
 
-main>article>.article-section {
-    height: 100%;
+.article-section {
+  gap: 1rem;
+  padding: 1rem;
+  z-index: 2;
+  padding: 1rem 2rem;
 }
 
-main>article>.article-query-section {
-    border-bottom: 1px solid var(--border-color);
+.article-query-section {
+  border-bottom: var(--border-width) solid var(--border-color);
+  height: min-content;
+  background-color: var(--background-color-transparent);
+  transition: all 400ms ease;
 }
 
-main>article>.article-stats-section {
-    border-left: 1px solid var(--border-color);
+.article-query-section:hover {
+  background-color: var(--background-color-transparent-hover);
+}
+
+.article-stats-section {
+  display: flex;
+  height: 100vh;
+  overflow-y: scroll;
+  border-left: var(--border-width) solid var(--border-color);
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: column;
+  padding: 1rem;
+}
+
+.article-results-section {
+  display: grid;
+  height: 100vh;
+  overflow-y: scroll;
+  padding: 0;
+}
+
+.results-table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.results-table thead tr {
+  background-color: var(--background-color-transparent);
+  color: var(--foreground-color);
+  text-align: left;
+  font-size: 1.5em;
+  font-style: oblique;
+  text-transform: uppercase;
+  transition: all 400ms ease;
+  border-bottom: 2px solid var(--border-color);
+}
+.results-table thead tr:hover {
+  background-color: var(--background-color-transparent-hover);
+}
+
+.results-table th,
+.results-table td {
+  min-width: 128px;
+  padding: 1rem 2rem;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.results-table tbody tr {
+  color: var(--foreground-color);
+  text-align: left;
+  font-size: 1.1em;
+  font-style: oblique;
+  transition: all 400ms ease;
+  border-bottom: 2px solid var(--border-color);
+}
+
+.results-table tbody tr:hover {
+  background-color: var(--background-color-transparent);
+  border-bottom: 2px solid var(--foreground-color);
 }
