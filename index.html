@@ -21,234 +21,76 @@
 </head>
 
 <body>
-    <nav>
-        <div id="nav-name-section" class="nav-section">
+    <div class="grid-container">
+        <div class="border-bottom border-right panel-bright logo">
+            <img src="img/swrg.png" alt="SWRG" title="Ship Workshop and Rig Generator" id="img-logo">
+        </div>
+        <div class="border-bottom border-right panel name">
             <h1>Redout II Ship Generator</h1>
-            <h1 id="rocket">
+            <h1 class="icon-rocket">
                 <i class="fa-solid fa-fire-flame-simple fa-rotate-270"></i><i class="fa-solid fa-shuttle-space"></i>
             </h1>
         </div>
-        <div id="nav-social-section" class="nav-section">
-            <div class="social-link">
-                <h1>
-                    <a href="https://discord.gg/redout" title="Redout Discord">
-                        <i class="fa-solid fa-brands fa-discord"></i>
-                    </a>
-                </h1>
-            </div>
-            <div class="social-link">
-                <h1>
-                    <a href="https://twitter.com/redout2game" title="Redout Twitter">
-                        <i class="fa-solid fa-brands fa-twitter"></i>
-                    </a>
-                </h1>
-            </div>
-            <div class="social-link">
-                <h1>
-                    <a href="https://redout.games/" title="Redout Website">
-                        <i class="fa-solid fa-earth"></i>
-                    </a>
-                </h1>
-            </div>
-            <div class="social-link">
-                <h1>
-                    <a href="mailto:dandyislion@protonmail.com" title="Email webpage developer">
-                        <i class="fa-solid fa-envelope"></i>
-                    </a>
-                </h1>
-            </div>
+        <div class="border-bottom panel social">
+            <h1>
+                <a href="https://discord.gg/redout" title="Redout Discord">
+                    <i class="icon-social fa-solid fa-brands fa-discord"></i>
+                </a>
+            </h1>
+            <h1>
+                <a href="https://twitter.com/redout2game" title="Redout Twitter">
+                    <i class="icon-social fa-solid fa-brands fa-twitter"></i>
+                </a>
+            </h1>
+            <h1>
+                <a href="https://redout.games/" title="Redout Website">
+                    <i class="icon-social fa-solid fa-earth"></i>
+                </a>
+            </h1>
+            <h1>
+                <a href="mailto:dandyislion@protonmail.com" title="Email webpage developer">
+                    <i class="icon-social fa-solid fa-envelope"></i>
+                </a>
+            </h1>
         </div>
-        <div id="nav-logo-section" class="nav-section">
-            <img src="img/swrg.png" alt="SWRG" title="Ship Workshop and Rig Generator" id="nav-logo">
+        <div class="border-bottom border-right panel stats">
+            <canvas id="stat-radar" style="height:19rem;width:22rem"></canvas>
+            <canvas id="stat-bars" style="height:19rem;width:22rem"></canvas>
         </div>
-    </nav>
-    <main>
-        <article id="article-shipgen" class="">
-            <div id="query-shipgen" class="article-query-section article-section">
-                <form onsubmit="handleFormSubmit(event)">
-                    <label for="query">
-                        <h2>Query:</h2>
-                    </label>
-                    <input type="text" id="query" name="query">
-                    <button type="reset">Reset</button>
-                    <button type="submit">Generate!</button>
-                </form>
-            </div>
-            <div id="stats-shipgen" class="article-stats-section article-section">
-
-                <canvas id="stat-radar" style="height:19rem;width:22rem"></canvas>
-                <canvas id="stat-bars" style="height:19rem;width:22rem"></canvas>
-            </div>
-            <div id="results-shipgen" class="article-results-section article-section">
-                <!-- <table class="results-table">
-                        <thead>
-                            <tr>
-                                <th>Compare</th>
-                                <th>Ship</th>
-                                <th>Propulsor</th>
-                                <th>Stabilizer</th>
-                                <th>Rudder</th>
-                                <th>Intercooler</th>
-                                <th>Electronic Stability Control</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><button>test</button></td>
-                                <td>Jill</td>
-                                <td>Smith</td>
-                                <td>50</td>
-                            </tr>
-                            <tr>
-                                <td><button>test</button></td>
-                                <td>Jill</td>
-                                <td>Smith</td>
-                                <td>50</td>
-                            </tr>
-                            <tr>
-                                <td><button>test</button></td>
-                                <td>Jill</td>
-                                <td>Smith</td>
-                                <td>50</td>
-                            </tr>
-                            <tr>
-                                <td><button>test</button></td>
-                                <td>Jill</td>
-                                <td>Smith</td>
-                                <td>50</td>
-                            </tr>
-                            <tr>
-                                <td><button>test</button></td>
-                                <td>Jill</td>
-                                <td>Smith</td>
-                                <td>50</td>
-                            </tr>
-                            <tr>
-                                <td><button>test</button></td>
-                                <td>Jill</td>
-                                <td>Smith</td>
-                                <td>50</td>
-                            </tr>
-                            <tr>
-                                <td><button>test</button></td>
-                                <td>Jill</td>
-                                <td>Smith</td>
-                                <td>50</td>
-                            </tr>
-                            <tr>
-                                <td><button>test</button></td>
-                                <td>Jill</td>
-                                <td>Smith</td>
-                                <td>50</td>
-                            </tr>
-                            <tr>
-                                <td><button>test</button></td>
-                                <td>Jill</td>
-                                <td>Smith</td>
-                                <td>50</td>
-                            </tr>
-                            <tr>
-                                <td><button>test</button></td>
-                                <td>Jill</td>
-                                <td>Smith</td>
-                                <td>50</td>
-                            </tr>
-                            <tr>
-                                <td><button>test</button></td>
-                                <td>Jill</td>
-                                <td>Smith</td>
-                                <td>50</td>
-                            </tr>
-                            <tr>
-                                <td><button>test</button></td>
-                                <td>Jill</td>
-                                <td>Smith</td>
-                                <td>50</td>
-                            </tr>
-                            <tr>
-                                <td><button>test</button></td>
-                                <td>Jill</td>
-                                <td>Smith</td>
-                                <td>50</td>
-                            </tr>
-                            <tr>
-                                <td><button>test</button></td>
-                                <td>Jill</td>
-                                <td>Smith</td>
-                                <td>50</td>
-                            </tr>
-                            <tr>
-                                <td><button>test</button></td>
-                                <td>Jill</td>
-                                <td>Smith</td>
-                                <td>50</td>
-                            </tr>
-                            <tr>
-                                <td><button>test</button></td>
-                                <td>Jill</td>
-                                <td>Smith</td>
-                                <td>50</td>
-                            </tr>
-                            <tr>
-                                <td><button>test</button></td>
-                                <td>Jill</td>
-                                <td>Smith</td>
-                                <td>50</td>
-                            </tr>
-                            <tr>
-                                <td><button>test</button></td>
-                                <td>Jill</td>
-                                <td>Smith</td>
-                                <td>50</td>
-                            </tr>
-                            <tr>
-                                <td><button>test</button></td>
-                                <td>Jill</td>
-                                <td>Smith</td>
-                                <td>50</td>
-                            </tr>
-                            <tr>
-                                <td><button>test</button></td>
-                                <td>Jill</td>
-                                <td>Smith</td>
-                                <td>50</td>
-                            </tr>
-                            <tr>
-                                <td><button>test</button></td>
-                                <td>Jill</td>
-                                <td>Smith</td>
-                                <td>50</td>
-                            </tr>
-                            <tr>
-                                <td><button>test</button></td>
-                                <td>Jill</td>
-                                <td>Smith</td>
-                                <td>50</td>
-                            </tr>
-                            <tr>
-                                <td><button>test</button></td>
-                                <td>Jill</td>
-                                <td>Smith</td>
-                                <td>50</td>
-                            </tr>
-                            <tr>
-                                <td><button>test</button></td>
-                                <td>Jill</td>
-                                <td>Smith</td>
-                                <td>50</td>
-                            </tr>
-                        </tbody>
-                    </table> -->
-            </div>
-        </article>
-        <article id="" class="">
-            <div id="" class="">
-            </div>
-            <div id="" class="">
-            </div>
-        </article>
-    </main>
+        <div class="border-right panel query">
+            <form onsubmit="handleFormSubmit(event)">
+                <label for="query">Query:</label>
+                <input type="text" id="query" name="query">
+                <button type="reset">Reset</button>
+                <button type="submit">Generate!</button>
+            </form>
+        </div>
+        <div class="results">
+            <table class='results-table' id='results-table'>
+                <thead>
+                    <tr>
+                        <th class="column-index"><i class="fa-solid fa-hashtag"></i></th>
+                        <th class="column-ship-header">Ship</th>
+                        <th class="column-icon"><i class="fa-solid fa-angles-right"></i></th>
+                        <th class="column-icon"><i class="fa-solid fa-plane-arrival"></i></th>
+                        <th class="column-icon"><i class="fa-solid fa-dharmachakra"></i></th>
+                        <th class="column-icon"><i class="fa-solid fa-shield-halved"></i></th>
+                        <th class="column-icon"><i class="fa-solid fa-snowflake"></i></th>
+                        <th class="column-icon"><i class="fa-solid fa-bolt"></i></th>
+                        <th class="column-score-header">Score</th>
+                        <th class="column-icon"><i class="fa-solid fa-plus"></i></th>
+                        <th class="column-icon"><i class="fa-solid fa-plane-departure"></i></th>
+                        <th class="column-icon"><i class="fa-solid fa-gauge-high"></i></th>
+                        <th class="column-icon"><i class="fa-solid fa-magnet"></i></th>
+                        <th class="column-icon"><i class="fa-solid fa-rotate"></i></th>
+                        <th class="column-icon"><i class="fa-solid fa-left-right"></i></th>
+                    </tr>
+                </thead>
+                <tbody id="results"></tbody>
+            </table>
+        </div>
     </div>
     <div id="background-pattern"></div>
+</body>
 
 </html>
