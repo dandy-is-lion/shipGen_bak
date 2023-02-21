@@ -6,20 +6,23 @@ function runQuery(query) {
                 var results = JSON.parse(xhr.responseText);
                 var cols = results["columns"];
                 var data = results["data"];
-                var html = "<table class='results-table' id='results-table'><thead><tr>";
-                for (var i = 0; i < cols.length; i++) {
-                    html += "<th title='" + cols[i].replaceAll('_', ' ') + "'>" + cols[i].replaceAll('_', ' ') + "</th>";
-                }
-                html += "</tr></thead><tbody>";
+                var html = "";
                 for (var i = 0; i < data.length; i++) {
                     html += "<tr>";
                     for (var j = 0; j < cols.length; j++) {
-                        html += "<td title='" + cols[j].replaceAll('_', ' ') + ": " + data[i][cols[j]] + "'>" + data[i][cols[j]] + "</td>";
+                        var cellData = data[i][cols[j]];
+                        html += "<td class='"
+                        if (j === 0) html += " column-index";
+                        if (j === 1) html += " column-ship";
+                        if (j === 8) html += " column-score";
+                        html += " results-cell' title='" + cols[j].replaceAll('_', ' ') + ": " + cellData + "'>"
+                        if (j === 1) html += "<img class='ship-icon' src='img/" + cellData + ".webp'/> ";
+                        html += cellData + "</td>";
+
                     }
                     html += "</tr>";
                 }
-                html += "</tbody></table>";
-                document.getElementById("results-shipgen").innerHTML = html;
+                document.getElementById("results").innerHTML = html;
                 addRowHandlers();
             } else {
                 alert("No results found.");
@@ -239,6 +242,27 @@ function getCellValue(row, cell) {
     return row.getElementsByTagName('td')[cell].innerHTML;
 }
 
+let getSiblings = function (e) {
+    // for collecting siblings
+    let siblings = [];
+    // if no parent, return no sibling
+    if (!e.parentNode) {
+        return siblings;
+    }
+    // first child of the parent node
+    let sibling = e.parentNode.firstChild;
+
+    // collecting siblings
+    while (sibling) {
+        if (sibling.nodeType === 1 && sibling !== e) {
+            siblings.push(sibling);
+        }
+        sibling = sibling.nextSibling;
+    }
+    return siblings;
+};
+
+
 function addRowHandlers() {
     var table = document.getElementById("results-table");
     var rows = table.getElementsByTagName("tr");
@@ -246,6 +270,11 @@ function addRowHandlers() {
         var currentRow = table.rows[i];
         var createClickHandler = function (row) {
             return function () {
+                row.classList.add('results-selected')
+                var siblings = getSiblings(row);
+                for (i = 0; i < siblings.length; i++) {
+                    siblings[i].classList.remove('results-selected');
+                }
                 var stats = getStats(row);
                 updateStatCharts(statRadar, 0, stats);
                 updateStatCharts(statBars, 0, stats);
