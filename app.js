@@ -15,6 +15,7 @@ function runQuery(query) {
                         if (j === 0) html += " column-index";
                         if (j === 1) html += " column-ship";
                         if (j === 8) html += " column-score";
+                        if (j === 15) html += " column-deviation";
                         html += " results-cell' title='" + cols[j].replaceAll('_', ' ') + ": " + cellData + "'>"
                         if (j === 1) html += "<img class='ship-icon' src='img/" + cellData + ".webp'/> ";
                         html += cellData + "</td>";
@@ -22,7 +23,7 @@ function runQuery(query) {
                     }
                     html += "</tr>";
                 }
-                document.getElementById("results").innerHTML = html;
+                document.getElementById("tbody-results").innerHTML = html;
                 addRowHandlers();
             } else {
                 alert("No results found.");
@@ -33,8 +34,22 @@ function runQuery(query) {
     xhr.send();
 }
 
+var powerMin = document.getElementById("input-power-min").value;
+var powerMax = document.getElementById("input-power-max").value;
+
 function handleFormSubmit(event) {
     event.preventDefault();
+    var shipClass = "srrl";
+    var query = "select combos.*, abs(dura - " +
+        dataTarget[0] + ") + abs(thr - " +
+        dataTarget[1] + ") + abs(spd - " +
+        dataTarget[2] + ") + abs(staby - " +
+        dataTarget[3] + ") + abs(steer - " +
+        dataTarget[4] + ") + abs(strafe - " +
+        dataTarget[5] + ") as devi FROM combos inner join (select id from combos_" +
+        shipClass + " where score between " +
+        powerMin + " and " + powerMax +
+        ") q on combos.id = q.id order by devi limit 100";
     // var query = "SELECT * FROM combos_";
     // const score = document.getElementById("score").value;
     // const power_min = document.getElementById("power_min").value;
@@ -54,7 +69,7 @@ function handleFormSubmit(event) {
     //     query += " AND ship IN (" + ships + ")";
     // }
     // query += " LIMIT " + limit;
-    runQuery(document.getElementById("query").value);
+    runQuery(query);
 }
 
 Chart.defaults.borderColor = '#3B8EB9';
@@ -264,7 +279,7 @@ let getSiblings = function (e) {
 
 
 function addRowHandlers() {
-    var table = document.getElementById("results-table");
+    var table = document.getElementById("table-results");
     var rows = table.getElementsByTagName("tr");
     for (i = 1; i < rows.length; i++) {
         var currentRow = table.rows[i];

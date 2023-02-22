@@ -22,7 +22,7 @@
 
 <body>
     <div class="grid-container">
-        <div class="border-bottom border-right panel-bright logo">
+        <div class="border-bottom border-right panel logo">
             <img src="img/swrg.png" alt="SWRG" title="Ship Workshop and Rig Generator" id="img-logo">
         </div>
         <div class="border-bottom border-right panel name">
@@ -59,34 +59,43 @@
         </div>
         <div class="border-right panel query">
             <form onsubmit="handleFormSubmit(event)">
-                <label for="query">Query:</label>
-                <input type="text" id="query" name="query">
-                <button type="reset">Reset</button>
-                <button type="submit">Generate!</button>
+                <label>Target:</label>
+                <label for="input-power-min">Min:</label><input type="number" class="button-query" id="input-power-min"
+                    name="input-power-min" min="100" max="1200">
+                <labal for="input-power-max">Max:</labal><input type="number" class="button-query" id="input-power-max"
+                    name="input-power-max" min="100" max="1200">
+                <!-- <input class="button-query" type="number" id="" -->
+                <!-- <input class="button-query" type="text" id="query" name="query"> -->
+                <input type="reset" class="button-query" value="Reset">
+                <input type="submit" class="button-query" value="Generate">
             </form>
         </div>
         <div class="results">
-            <table class='results-table' id='results-table'>
+            <table class='table-results' id='table-results'>
                 <thead>
                     <tr>
-                        <th class="column-index"><i class="fa-solid fa-hashtag"></i></th>
+                        <th class="column-index" title="ID"><i class="fa-solid fa-hashtag"></i></th>
                         <th class="column-ship-header">Ship</th>
-                        <th class="column-icon"><i class="fa-solid fa-angles-right"></i></th>
-                        <th class="column-icon"><i class="fa-solid fa-plane-arrival"></i></th>
-                        <th class="column-icon"><i class="fa-solid fa-dharmachakra"></i></th>
-                        <th class="column-icon"><i class="fa-solid fa-shield-halved"></i></th>
-                        <th class="column-icon"><i class="fa-solid fa-snowflake"></i></th>
-                        <th class="column-icon"><i class="fa-solid fa-bolt"></i></th>
+                        <th class="column-icon" title="Propulsor"><i class="fa-solid fa-angles-right"></i></th>
+                        <th class="column-icon" title="Stabilizer"><i class="fa-solid fa-plane-arrival"></i></th>
+                        <th class="column-icon" title="Rudder"><i class="fa-solid fa-dharmachakra"></i></th>
+                        <th class="column-icon" title="Hull"><i class="fa-solid fa-shield-halved"></i></th>
+                        <th class="column-icon" title="Intercooler"><i class="fa-solid fa-snowflake"></i></th>
+                        <th class="column-icon" title="Electronic Stability Control"><i class="fa-solid fa-bolt"></i>
+                        </th>
                         <th class="column-score-header">Score</th>
-                        <th class="column-icon"><i class="fa-solid fa-plus"></i></th>
-                        <th class="column-icon"><i class="fa-solid fa-plane-departure"></i></th>
-                        <th class="column-icon"><i class="fa-solid fa-gauge-high"></i></th>
-                        <th class="column-icon"><i class="fa-solid fa-magnet"></i></th>
-                        <th class="column-icon"><i class="fa-solid fa-rotate"></i></th>
-                        <th class="column-icon"><i class="fa-solid fa-left-right"></i></th>
+                        <th class="column-icon" title="Durability"><i class="fa-solid fa-plus"></i></th>
+                        <th class="column-icon" title="Thrust"><i class="fa-solid fa-plane-departure"></i></th>
+                        <th class="column-icon" title="Top Speed"><i class="fa-solid fa-gauge-high"></i></th>
+                        <th class="column-icon" title="Stability"><i class="fa-solid fa-magnet"></i></th>
+                        <th class="column-icon" title="Steer"><i class="fa-solid fa-rotate"></i></th>
+                        <th class="column-icon" title="Strafe"><i class="fa-solid fa-left-right"></i></th>
+                        <th class="column-deviation-header" title="Deviation"><i
+                                class="fa-solid fa-arrows-split-up-and-left"></i>
+                        </th>
                     </tr>
                 </thead>
-                <tbody id="results"></tbody>
+                <tbody id="tbody-results"></tbody>
             </table>
         </div>
     </div>
