@@ -215,8 +215,8 @@ h1 {
   grid-row: 3;
   padding: 1rem;
   display: grid;
-  overflow-x: hidden;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .button-query {
