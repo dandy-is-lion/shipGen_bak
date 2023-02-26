@@ -1,75 +1,103 @@
+var startTime = "";
+
 function runQuery(query) {
-    var xhr = new XMLHttpRequest();
+    const xhr = new XMLHttpRequest();
+
     xhr.onreadystatechange = function () {
         if (xhr.readyState === XMLHttpRequest.DONE) {
             if (xhr.status === 200) {
-                var results = JSON.parse(xhr.responseText);
-                var cols = results["columns"];
-                var data = results["data"];
-                var html = "";
-                for (var i = 0; i < data.length; i++) {
-                    html += "<tr>";
-                    for (var j = 0; j < cols.length; j++) {
-                        var cellData = data[i][cols[j]];
-                        html += "<td class='"
-                        if (j === 0) html += " column-index";
-                        if (j === 1) html += " column-ship";
-                        if (j === 8) html += " column-score";
-                        if (j === 15) html += " column-deviation";
-                        html += " results-cell' title='" + cols[j].replaceAll('_', ' ') + ": " + cellData + "'>"
-                        if (j === 1) html += "<img class='ship-icon' src='img/" + cellData + ".webp'/> ";
-                        html += cellData + "</td>";
+                const results = JSON.parse(xhr.responseText);
+                const cols = results.columns;
+                const data = results.data;
+                let html = "";
 
+                for (let i = 0; i < data.length; i++) {
+                    html += "<tr>";
+
+                    for (let j = 0; j < cols.length; j++) {
+                        const cellData = data[i][cols[j]];
+                        let cssClass = "";
+                        let shipIcon = "";
+
+                        switch (j) {
+                            case 0:
+                                cssClass = "column-index";
+                                break;
+                            case 1:
+                                cssClass = "column-ship";
+                                shipIcon = "<img class='ship-icon' src='img/" + cellData + ".webp'/> ";
+                                break;
+                            case 8:
+                                cssClass = "column-score";
+                                break;
+                            case 15:
+                                cssClass = "column-deviation";
+                                break;
+                            default:
+                                if (j > 8 && j < 15) {
+                                    if (cellData > (dataTarget[j - 9] + (dataTarget[j - 9] * 0.1))) {
+                                        cssClass = "results-cell-good";
+                                    }
+                                    if (cellData < (dataTarget[j - 9] - (dataTarget[j - 9] * 0.1))) {
+                                        cssClass = "results-cell-bad";
+                                    }
+                                }
+                        }
+
+                        html += `<td class="results-cell ${cssClass}" title="${cols[j]}: ${cellData}">${shipIcon}${cellData}</td>`;
                     }
+
                     html += "</tr>";
                 }
+
+                document.getElementById("button-generate").innerHTML = `Generate (${(new Date() - startTime) / 1000}s)`;
                 document.getElementById("tbody-results").innerHTML = html;
                 addRowHandlers();
             } else {
+                document.getElementById("button-generate").innerHTML = "Generate";
                 alert("No results found.");
             }
         }
     };
-    xhr.open("GET", "query.php?query=" + encodeURIComponent(query), true);
+
+    xhr.open("GET", `./src/query.php?query=${encodeURIComponent(query)}`, true);
     xhr.send();
 }
 
-var powerMin = document.getElementById("input-power-min").value;
-var powerMax = document.getElementById("input-power-max").value;
-
 function handleFormSubmit(event) {
+    // Prevent form submission from reloading the page
     event.preventDefault();
-    var shipClass = "srrl";
-    var query = "select combos.*, abs(dura - " +
-        dataTarget[0] + ") + abs(thr - " +
-        dataTarget[1] + ") + abs(spd - " +
-        dataTarget[2] + ") + abs(staby - " +
-        dataTarget[3] + ") + abs(steer - " +
-        dataTarget[4] + ") + abs(strafe - " +
-        dataTarget[5] + ") as devi FROM combos inner join (select id from combos_" +
-        shipClass + " where score between " +
-        powerMin + " and " + powerMax +
-        ") q on combos.id = q.id order by devi limit 100";
-    // var query = "SELECT * FROM combos_";
-    // const score = document.getElementById("score").value;
-    // const power_min = document.getElementById("power_min").value;
-    // const power_max = document.getElementById("power_max").value;
-    // const ship = document.getElementById("ship").selectedOptions;
-    // var ships = [];
-    // for (let i = 0; i < ship.length; i++) {
-    //     ships.push(ship[i].value);
-    // }
-    // const limit = document.getElementById("limit").value;
-    // if (score == "all") {
-    //     query += score + " WHERE score BETWEEN " + power_min + " AND " + power_max;
-    // } else {
-    //     query += score + " WHERE score = score";
-    // }
-    // if (!ships.includes('any')) {
-    //     query += " AND ship IN (" + ships + ")";
-    // }
-    // query += " LIMIT " + limit;
+
+    // Get the form input values
+    const powerMin = document.getElementById("input-power-min").value;
+    const powerMax = document.getElementById("input-power-max").value;
+    const selectedClass = document.getElementById("select-class").value;
+    const selectedShips = Array.from(document.getElementById("select-ships").selectedOptions)
+        .map(option => `'${option.value}'`);
+
+    // Build the SQL query based on the form inputs
+    let query = `
+      SELECT *, ABS(dura - ${dataTarget[0]}) + ABS(thr - ${dataTarget[1]}) +
+          ABS(spd - ${dataTarget[2]}) + ABS(staby - ${dataTarget[3]}) +
+          ABS(steer - ${dataTarget[4]}) + ABS(strafe - ${dataTarget[5]}) AS devi
+      FROM `;
+
+    if (selectedClass === 'x') {
+        query += `combos_x WHERE ship IN (${selectedShips})`;
+    } else {
+        query += `combos INNER JOIN (
+          SELECT id FROM combos_${selectedClass} WHERE score BETWEEN ${powerMin} AND ${powerMax}
+        ) q ON combos.id = q.id WHERE ship IN (${selectedShips})`;
+    }
+
+    query += `      
+      ORDER BY devi LIMIT 100`;
+
+    let query2 = "SELECT *, ABS(spd - 90) + ABS(staby - 70) + ABS(thr - 35) AS devi FROM combos_x ORDER BY devi, dura DESC, steer DESC, strafe DESC LIMIT 100";
+    // Run the SQL query and update the button text
     runQuery(query);
+    startTime = new Date();
+    document.getElementById("button-generate").innerHTML = "Generating <i style='text-align:center' class='fa fa-cog fa-spin'></i>";
 }
 
 Chart.defaults.borderColor = '#3B8EB9';
@@ -91,45 +119,54 @@ const statLabels = [
     'Strafe'
 ];
 
+const targetColor = 'rgb(153, 255, 51)';
+const selectionColor = 'rgb(0, 72, 186)';
+const comparisonColor = 'rgb(229, 43, 80)';
+const targetColorA = 'rgba(153, 255, 51, 0.05)';
+const selectionColorA = 'rgba(0, 72, 186, 0.25)';
+const comparisonColorA = 'rgba(229, 43, 80, 0.05)';
+
 const statData = [{
-    label: 'Selection',
-    data: dataSelection,
-    fill: true,
-    borderWidth: 3,
-    backgroundColor: 'rgba(0, 72, 186, 0.2)',
-    borderColor: 'rgb(0, 72, 186)',
-    pointHitRadius: 25,
-    pointBorderWidth: 2,
-    pointBackgroundColor: 'rgb(0, 72, 186)',
-    pointBorderColor: '#fff',
-    pointHoverBackgroundColor: '#fff',
-    pointHoverBorderColor: 'rgb(0, 72, 186)'
-}, {
-    label: 'Comparison',
-    data: dataComparison,
-    fill: true,
-    borderWidth: 3,
-    backgroundColor: 'rgba(229,43,80, 0.2)',
-    borderColor: 'rgb(229,43,80)',
-    pointHitRadius: 25,
-    pointBorderWidth: 2,
-    pointBackgroundColor: 'rgb(229,43,80)',
-    pointBorderColor: '#fff',
-    pointHoverBackgroundColor: '#fff',
-    pointHoverBorderColor: 'rgb(229,43,80)'
-}, {
     label: 'Target',
     data: dataTarget,
     fill: true,
     borderWidth: 3,
-    backgroundColor: 'rgba(153, 255, 51, 0.2)',
-    borderColor: 'rgb(153, 255, 51)',
+    backgroundColor: targetColorA,
+    borderColor: targetColor,
     pointHitRadius: 25,
-    pointBorderWidth: 2,
-    pointBackgroundColor: 'rgb(153, 255, 51)',
-    pointBorderColor: '#fff',
-    pointHoverBackgroundColor: '#fff',
-    pointHoverBorderColor: 'rgb(153, 255, 51)'
+    pointBorderWidth: 0,
+    pointBackgroundColor: targetColorA,
+    pointBorderColor: targetColor,
+    pointHoverBackgroundColor: targetColor,
+    pointHoverBorderColor: targetColor
+}, {
+    label: 'Selection',
+    data: dataSelection,
+    fill: true,
+    hidden: true,
+    borderWidth: 3,
+    backgroundColor: selectionColorA,
+    borderColor: selectionColor,
+    pointHitRadius: 25,
+    pointBorderWidth: 0,
+    pointBackgroundColor: selectionColorA,
+    pointBorderColor: selectionColor,
+    pointHoverBackgroundColor: selectionColor,
+    pointHoverBorderColor: selectionColor
+}, {
+    label: 'Comparison',
+    data: dataComparison,
+    fill: true,
+    hidden: true,
+    borderWidth: 3,
+    backgroundColor: comparisonColorA,
+    borderColor: comparisonColor,
+    pointHitRadius: 25,
+    pointBorderWidth: 0,
+    pointBackgroundColor: comparisonColorA,
+    pointBorderColor: comparisonColor,
+    pointHoverBackgroundColor: comparisonColor,
+    pointHoverBorderColor: comparisonColor
 }];
 
 const ctxRadar = document.getElementById('stat-radar').getContext('2d');
@@ -154,11 +191,11 @@ var statRadar = new Chart(ctxRadar, {
                 round: 1,
                 showTooltip: true,
                 onDragStart: function (e) {
-                    if (!(element.datasetIndex === 2)) return false
+                    if (!(element.datasetIndex === 0)) return false
                 },
                 onDrag: function (e, datasetIndex, index, value) {
                     e.target.style.cursor = 'grabbing'
-                    if (!(datasetIndex === 2)) return false
+                    if (!(datasetIndex === 0)) return false
                 },
                 onDragEnd: function (e, datasetIndex, index, value) {
                     e.target.style.cursor = 'default'
@@ -220,11 +257,11 @@ var statBars = new Chart(ctxBars, {
                 round: 1,
                 showTooltip: true,
                 onDragStart: function (e) {
-                    if (!(element.datasetIndex === 2)) return false
+                    if (!(element.datasetIndex === 0)) return false
                 },
                 onDrag: function (e, datasetIndex, index, value) {
                     e.target.style.cursor = 'grabbing'
-                    if (!(datasetIndex === 2)) return false
+                    if (!(datasetIndex === 0)) return false
                 },
                 onDragEnd: function (e, datasetIndex, index, value) {
                     e.target.style.cursor = 'default'
@@ -240,6 +277,7 @@ var statBars = new Chart(ctxBars, {
 
 function updateStatCharts(chart, dataset, data) {
     chart.data.datasets[dataset].data = data;
+    chart.data.datasets[dataset].hidden = false;
     chart.update();
 }
 
@@ -285,43 +323,26 @@ function addRowHandlers() {
         var currentRow = table.rows[i];
         var createClickHandler = function (row) {
             return function () {
+                // Change the Selection graphs to whatever row was clicked and mark that row as selected
                 row.classList.add('results-selected')
                 var siblings = getSiblings(row);
                 for (i = 0; i < siblings.length; i++) {
                     siblings[i].classList.remove('results-selected');
                 }
                 var stats = getStats(row);
-                updateStatCharts(statRadar, 0, stats);
-                updateStatCharts(statBars, 0, stats);
+                updateStatCharts(statRadar, 1, stats);
+                updateStatCharts(statBars, 1, stats);
             };
         };
         var createHoverHandler = function (row) {
             return function () {
+                // Change the Comparison graphs to whatever row is hovered
                 var stats = getStats(row);
-                updateStatCharts(statRadar, 1, stats);
-                updateStatCharts(statBars, 1, stats);
+                updateStatCharts(statRadar, 2, stats);
+                updateStatCharts(statBars, 2, stats);
             };
         };
         currentRow.onclick = createClickHandler(currentRow);
         currentRow.addEventListener("mouseover", createHoverHandler(currentRow));
     }
 }
-
-//   const queryDurability = document.getElementById('durability');
-//   const queryThrust = document.getElementById('thrust');
-//   const queryTopSpeed = document.getElementById('top_speed');
-//   const queryStability = document.getElementById('stability');
-//   const querySteer = document.getElementById('steer');
-//   const queryStrafe = document.getElementById('strafe');
-
-//   var createTargetHandler = function () {
-//     return function () {
-//       updateStatCharts(statRadar, 2, [queryDurability.value,
-//         queryThrust.value,
-//         queryTopSpeed.value,
-//         queryStability.value,
-//         querySteer.value,
-//         queryStrafe.value
-//       ])
-//     }
-//   };

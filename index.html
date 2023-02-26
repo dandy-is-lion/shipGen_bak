@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href=".\style.css">
+    <link rel="stylesheet" href="./style.css">
     <link rel="stylesheet" id="google-fonts-1-css"
         href="https://fonts.googleapis.com/css?family=Roboto+Condensed%3A100%2C100italic%2C200%2C200italic%2C300%2C300italic%2C400%2C400italic%2C500%2C500italic%2C600%2C600italic%2C700%2C700italic%2C800%2C800italic%2C900%2C900italic%7CRoboto%3A100%2C100italic%2C200%2C200italic%2C300%2C300italic%2C400%2C400italic%2C500%2C500italic%2C600%2C600italic%2C700%2C700italic%2C800%2C800italic%2C900%2C900italic&amp;display=auto&amp;ver=6.1.1"
         media="all">
@@ -13,7 +13,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-dragdata@2.2.3/dist/chartjs-plugin-dragdata.min.js">
     </script>
-    <script defer src="app.js"></script>
+    <script defer src="./src/app.js"></script>
     <noscript>
         <h1>Javascript is required to use this page.</h1>
     </noscript>
@@ -48,6 +48,11 @@
                 </a>
             </h1>
             <h1>
+                <a href="https://www.speedrun.com/redout_2/" title="Redout 2 Speedrunning Leaderboard">
+                    <i class="icon-social fa-solid fa-trophy"></i>
+                </a>
+            </h1>
+            <h1>
                 <a href="mailto:dandyislion@protonmail.com" title="Email webpage developer">
                     <i class="icon-social fa-solid fa-envelope"></i>
                 </a>
@@ -59,15 +64,35 @@
         </div>
         <div class="border-right panel query">
             <form onsubmit="handleFormSubmit(event)">
-                <label>Target:</label>
+                <label for="select-class">Class:</label>
+                <select name="select-class" id="select-class" class="button-query" value="x">
+                    <option value="b" disabled>B league</option>
+                    <option value="a" disabled>A league</option>
+                    <option value="s" disabled>S league</option>
+                    <option value="srrl">SRRL league</option>
+                    <option value="x">X league</option>
+                </select><br>
+                <label for="select-ships">Ships:</label>
+                <select name="select-ships" id="select-ships" class="button-query" multiple>
+                    <option value="Lunare">Lunare</option>
+                    <option value="Conq">Conq</option>
+                    <option value="Helix">Helix</option>
+                    <option value="Asera">Asera</option>
+                    <option value="ESA">ESA</option>
+                    <option value="Wallace">Wallace</option>
+                    <option value="Sulha">Sulha</option>
+                    <option value="Mantis">Mantis</option>
+                    <option value="Akhal">Akhal</option>
+                    <option value="Koen">Koen</option>
+                    <option value="Bmoth">Bmoth</option>
+                    <option value="Buran">Buran</option>
+                </select><br>
                 <label for="input-power-min">Min:</label><input type="number" class="button-query" id="input-power-min"
-                    name="input-power-min" min="100" max="1200">
-                <labal for="input-power-max">Max:</labal><input type="number" class="button-query" id="input-power-max"
-                    name="input-power-max" min="100" max="1200">
-                <!-- <input class="button-query" type="number" id="" -->
-                <!-- <input class="button-query" type="text" id="query" name="query"> -->
+                    name="input-power-min" min="100" max="1200" value="975">
+                <label for="input-power-max">Max:</label><input type="number" class="button-query" id="input-power-max"
+                    name="input-power-max" min="100" max="1200" value="1200">
                 <input type="reset" class="button-query" value="Reset">
-                <input type="submit" class="button-query" value="Generate">
+                <button type="submit" class="button-query" id="button-generate">Generate</input>
             </form>
         </div>
         <div class="results">
@@ -90,7 +115,7 @@
                         <th class="column-icon" title="Stability"><i class="fa-solid fa-magnet"></i></th>
                         <th class="column-icon" title="Steer"><i class="fa-solid fa-rotate"></i></th>
                         <th class="column-icon" title="Strafe"><i class="fa-solid fa-left-right"></i></th>
-                        <th class="column-deviation-header" title="Deviation"><i
+                        <th class="column-deviation-header" title="Deviation (from Target)"><i
                                 class="fa-solid fa-arrows-split-up-and-left"></i>
                         </th>
                     </tr>
@@ -100,6 +125,7 @@
         </div>
     </div>
     <div id="background-pattern"></div>
+    <div id="background-pattern-2"></div>
 </body>
 
 </html>
