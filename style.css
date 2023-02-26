@@ -207,7 +207,7 @@ h1 {
   overflow-y: auto;
   resize: vertical;
   transition: background-color 400ms ease;
-  max-height: min-content;
+  max-height: 100%;
 }
 
 .query {
@@ -215,8 +215,8 @@ h1 {
   grid-row: 3;
   padding: 1rem;
   display: grid;
-  overflow-y: auto;
   overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .button-query {
