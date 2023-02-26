@@ -215,6 +215,8 @@ h1 {
   grid-row: 3;
   padding: 1rem;
   display: grid;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .button-query {
@@ -258,7 +260,6 @@ h1 {
   grid-column: 2 / span 2;
   grid-row: 2 / span 2;
   overflow: auto;
-  max-width: 100vw;
 }
 
 .table-results {
